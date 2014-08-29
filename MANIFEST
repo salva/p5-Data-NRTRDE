@@ -1,0 +1,8 @@
+Changes
+Makefile.PL
+MANIFEST
+NRTRDE.xs
+ppport.h
+README
+t/Data-NRTRDE.t
+lib/Data/NRTRDE.pm
