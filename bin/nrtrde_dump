@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Data::NRTRDE qw(parse_nrtrde);
+use JSON;
+use feature qw(say);
+
+my $json = JSON->new->ascii->pretty->indent;
+
+$| = 1;
+
+sub parse_and_dump_fh {
+    eval {
+	my $fh = shift;
+	defined $fh or die "Unable to open file: $!";
+	binmode $fh;
+	my $data = do { undef $/; <$fh> };
+	my $nrtrde = parse_nrtrde($data);
+	say $json->encode($nrtrde);
+    };
+    $@ and warn $@;
+}
+
+if (@ARGV) {
+    for my $fn (@ARGV) {
+        warn "parsing $fn\n";
+	open my $fh, '<', $fn;
+	parse_and_dump_fh($fh);
+    }
+}
+else {
+    parse_and_dump_fh(\*STDIN);
+}

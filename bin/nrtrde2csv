@@ -1,0 +1,142 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Data::NRTRDE qw(parse_nrtrde);
+use feature qw(say);
+
+use Text::CSV_XS;
+
+my $print_comment = 1;
+
+$| = 1;
+
+my %cols = ( Header => [qw(specification_version_number
+                           release_version_number
+                           utc_time_offset
+                           sender
+                           recipient
+                           sequence_number
+                           file_available_timestamp
+                           call_events_count)],
+
+             Moc    => [qw(imsi
+                           imei
+                           utc_time_offset
+                           duration
+                           cause_for_termination
+                           charge_amount
+                           serving_network
+                           msisdn
+                           location_area
+                           cell_id
+                           rec_entity_id
+                           call_reference
+                           service_code
+                           supplementary_service_code
+                           dialled_digits
+                           connected_number
+                           third_party_number)],
+
+             Mtc    => [qw(imsi
+                           imei
+                           utc_time_offset
+                           duration
+                           cause_for_termination
+                           charge_amount
+                           serving_network
+                           msisdn
+                           location_area
+                           cell_id
+                           rec_entity_id
+                           call_reference
+                           service_code
+                           calling_number)],
+
+             Gprs   => [qw(imsi
+                           imei
+                           utc_time_offset
+                           duration
+                           cause_for_termination
+                           charge_amount
+                           serving_network
+                           msisdn
+                           location_area
+                           cell_id
+                           start_timestamp
+                           access_point_name_ni
+                           access_point_name_oi
+                           data_volume_incoming
+                           data_volume_outgoing
+                           sgsn_address
+                           ggsn_address
+                           charging_id)] );
+
+# Column ordering checking:
+#
+# my %prev_ix;
+# my %prev_type;
+# for my $type (keys %cols) {
+#     next if $type eq 'Header';
+#     my $cols = $cols{$type};
+#     for (my $ix = 0; $ix < @$cols; $ix++) {
+#         my $name = $cols->[$ix];
+#         my $prev_ix = $prev_ix{$name};
+#         if (defined $prev_ix) {
+#             if ($prev_ix != $ix) {
+#                 warn "unmatching ix, name: $name, ix in $type: $ix, prev ix in $prev_type{$name}: $prev_ix\n";
+#             }
+#         }
+#         else {
+#             $prev_type{$name} = $type;
+#             $prev_ix{$name} = $ix;
+#         }
+#     }
+# }
+
+sub nrtrde2csv {
+    my ($nrtrde) = @_;
+    my $csv = Text::CSV_XS->new;
+    $csv->binary(1);
+    if ($print_comment) {
+        print "# NRTRDE dump, first field is discriminator, columns are as follows:\n";
+        for my $type (qw(Header Moc Mtc Gprs)) {
+            my $line = $csv->combine($type, map "\$$_", @{$cols{$type}});
+            print "# ", $csv->string, "\n";
+        }
+    }
+
+    $csv->combine(Header => map $nrtrde->{$_}, @{$cols{Header}});
+    print $csv->string, "\n";
+    for my $event (@{$nrtrde->{call_events}}) {
+        my $type = $event->{call_event_type};
+        my $cols = $cols{$type} or die "unexpected record type";
+        $csv->combine($type => map $event->{$_}, @$cols);
+        print $csv->string, "\n";
+    }
+
+}
+
+sub parse_and_dump_fh {
+    eval {
+	my $fh = shift;
+	defined $fh or die "Unable to open file: $!";
+	binmode $fh;
+	my $data = do { undef $/; <$fh> };
+	my $nrtrde = parse_nrtrde($data);
+        nrtrde2csv($nrtrde, $fh);
+    };
+    $@ and warn $@;
+}
+
+if (@ARGV) {
+    for my $fn (@ARGV) {
+        # warn "parsing $fn\n";
+	open my $fh, '<', $fn;
+	parse_and_dump_fh($fh);
+    }
+}
+else {
+    parse_and_dump_fh(\*STDIN);
+}
