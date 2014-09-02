@@ -30,6 +30,9 @@ Data::NRTRDE - Parser for NRTRDE files.
 This module parsers NRTRDE (Near Real Time Roaming Data Exchange)
 files and converts them into Perl data structures.
 
+Generation of NRTRDE is not currently supported. If you want to
+sponsor the feature, we will be very glad to hear from you.
+
 =head2 EXPORT
 
 The following subroutines can be imported from this module:
