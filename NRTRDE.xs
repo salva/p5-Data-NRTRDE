@@ -20,8 +20,14 @@ parse_nrtrde(pTHX_ SV *data) {
 
 MODULE = Data::NRTRDE		PACKAGE = Data::NRTRDE		
 
-SV *
+void
 parse_nrtrde(SV *data)
 PPCODE:
     ST(0) = parse_nrtrde(aTHX_ data);
     XSRETURN(1);
+
+BOOT:
+#ifndef MATH_INT64_NATIVE
+    PERL_MATH_INT64_LOAD_OR_CROAK
+#endif
+    ;

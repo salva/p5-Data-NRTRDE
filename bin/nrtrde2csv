@@ -4,8 +4,6 @@ use strict;
 use warnings;
 
 use Data::NRTRDE qw(parse_nrtrde);
-use feature qw(say);
-
 use Text::CSV_XS;
 
 my $print_comment = 1;

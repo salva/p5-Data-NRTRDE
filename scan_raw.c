@@ -2,10 +2,9 @@
 
 static int
 peek_raw_notag(const char **src, const char *max, SV *sv) {
-    const char *s;
     STRLEN len;
     if (peek_length(src, max, NULL, &len)) {
-	if (max - *src >= len) {
+        if (len <= (STRLEN)(max - *src)) {
 	    sv_setpvn(sv, *src, len);
 	    *src += len;
 	    return 1;
@@ -31,10 +30,9 @@ peek_raw(const char **src, const char *max, U8 *type, U64 *tag, SV *sv) {
 
 void
 scan_raw_notag(const char **src, const char *max, SV *sv) {
-    const char *s;
     STRLEN len;
     scan_length(src, max, NULL, &len);
-    if (len > max - *src)
+    if (len > (STRLEN)(max - *src))
 	croak("scan_raw_notag: packet too short");
     sv_setpvn(sv, *src, len);
     *src += len;

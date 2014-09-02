@@ -14,7 +14,6 @@ sv_catbcd(SV *sv, int nibble) {
 
 static int
 peek_bcd_notag(const char **src, const char *max, SV *sv) {
-    const char *s;
     STRLEN len;
     if (peek_length(src, max, NULL, &len)) {
         if (*src + len <= max) {

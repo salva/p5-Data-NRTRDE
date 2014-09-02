@@ -1,17 +1,6 @@
 #include "scan.h"
 
 int
-scan_indefinite_or_length(const char** src, const char* max, STRLEN *length) {
-    if (*src >= max) croak("scan_length: packet too short");
-    if (**src == 0x80) {
-	(*src)++;
-        *length = 0;
-	return 1;
-    }
-    
-}
-
-int
 scan_end_marker(const char** src, const char* max) {
     if (max - *src < 2) croak("scan_end_marker: packet too short");
     if (((*src)[0] == 0) && ((*src)[1] == 0)) {
@@ -35,8 +24,8 @@ peek_length(const char **src, const char *max, int *indefinite, STRLEN *length) 
             *length = 0;
         }
         else {
-            STRLEN l = 0;
-            STRLEN chars = (*(*src)++ & 0x7f);
+            int l = 0;
+            int chars = (*(*src)++ & 0x7f);
 
             if (chars > sizeof(*length))
                 croak("peek_length: length out of bounds (%u bytes)", (unsigned int)chars);

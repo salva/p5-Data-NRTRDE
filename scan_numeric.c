@@ -2,7 +2,6 @@
 
 static void
 scan_raw_int(const char** src, STRLEN len, I64* l) {
-    STRLEN i;
     I64 m;
 
     if (len == 1) /* optimize the common case */
@@ -29,7 +28,7 @@ int
 peek_numeric_notag(const char **src, const char *max, I64 *l) {
     STRLEN len;
     if (peek_length(src, max, NULL, &len)) {
-	if (max - *src >= len) {
+        if (len <= (STRLEN)(max - *src)) {
 	    scan_raw_int(src, len, l);
 	    return 1;
 	}
@@ -107,7 +106,7 @@ int
 peek_unsigned_numeric_notag(const char **src, const char *max, U64 *l) {
     STRLEN len;
     if (peek_length(src, max, NULL, &len)) {
-	if (max - *src >= len) {
+	if (len <= (STRLEN)(max - *src)) {
 	    scan_raw_unsigned_numeric(src, len, l);
 	    return 1;
 	}

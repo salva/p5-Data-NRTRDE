@@ -6,7 +6,10 @@
 
 /* ASN1 entities */
 
+int peek_tag(const char** src, const char* max, U8 *type, U64 *tag);
 void scan_tag(const char** src, const char* max, U8 *type, U64 *tag);
+int peek_tag_with_tt(const char **src,  const char *max, U8 expected_type, U64 expected_tag);
+void scan_tag_with_tt(const char **src, const char *max, U8 expected_type, U64 expected_tag);
 #define peek_small_tag_with_tt(src, max, tt) (((max) > *(src)) ? (*(*(src))++ == (tt) ? 1 : (croak("peek_small_tag_with_tt: bad packet"), 0)) : 0)
 #define scan_small_tag_with_tt(src, max, tt) if ((max) > *(src) && *(*(src))++ == (tt)) ; else croak("scan_small_tag_with_tt: bad packet")
 
@@ -18,6 +21,7 @@ int scan_end_marker(const char** src, const char* max);
 #define scan_and_check_end_marker(src, max, indefinite) \
   ((indefinite) ? scan_end_marker((src), (max)) : *(src) >= (max))
 
+int peek_length(const char** src, const char* max, int *indefinite, STRLEN* length);
 void scan_length(const char** src, const char* max, int *indefinite, STRLEN* length);
 void scan_length_and_set_max(const char **src, const char **max, int *indefinite);
 

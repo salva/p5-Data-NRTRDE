@@ -1,5 +1,7 @@
 #include "nrtrde.h"
 
+#include "nrtrde_app_tags.h"
+
 void
 scan_call_event(pTHX_ const char **src, const char *max, U64 tag, SV *out) {
     int indefinite;
@@ -53,11 +55,11 @@ scan_call_event(pTHX_ const char **src, const char *max, U64 tag, SV *out) {
                 break;
             case NRTRDE_TAG_CALL_EVENT_DURATION:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(hv, "duration", newSViv(target_numeric));
+                hv_stores(hv, "duration", newSVi64(target_numeric));
                 break;
             case NRTRDE_TAG_CAUSE_FOR_TERMINATION:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(hv, "cause_for_termination", newSViv(target_numeric));
+                hv_stores(hv, "cause_for_termination", newSVi64(target_numeric));
                 break;
             case NRTRDE_TAG_CALLING_NUMBER:
                 scan_raw_notag(src, max, target_sv);
@@ -69,15 +71,15 @@ scan_call_event(pTHX_ const char **src, const char *max, U64 tag, SV *out) {
                 break;
             case NRTRDE_TAG_CALL_REFERENCE:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(hv, "call_reference", newSViv(target_numeric));
+                hv_stores(hv, "call_reference", newSVi64(target_numeric));
                 break;
             case NRTRDE_TAG_CHARGE_AMOUNT:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(hv, "charge_amount", newSViv(target_numeric));
+                hv_stores(hv, "charge_amount", newSVi64(target_numeric));
                 break;
             case NRTRDE_TAG_CHARGING_ID:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(hv, "charging_id", newSViv(target_numeric));
+                hv_stores(hv, "charging_id", newSVi64(target_numeric));
                 break;
             case NRTRDE_TAG_DIALLED_DIGITS:
                 scan_raw_notag(src, max, target_sv);
@@ -97,15 +99,15 @@ scan_call_event(pTHX_ const char **src, const char *max, U64 tag, SV *out) {
                 break;
             case NRTRDE_TAG_CELL_ID:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(hv, "cell_id", newSViv(target_numeric));
+                hv_stores(hv, "cell_id", newSVi64(target_numeric));
                 break;
             case NRTRDE_TAG_DATA_VOLUME_INCOMING:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(hv, "data_volume_incoming", newSViv(target_numeric));
+                hv_stores(hv, "data_volume_incoming", newSVi64(target_numeric));
                 break;                
             case NRTRDE_TAG_DATA_VOLUME_OUTGOING:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(hv, "data_volume_outgoing", newSViv(target_numeric));
+                hv_stores(hv, "data_volume_outgoing", newSVi64(target_numeric));
                 break;
             case NRTRDE_TAG_GGSN_ADDRESS:
                 scan_raw_notag(src, max, target_sv);
@@ -117,7 +119,7 @@ scan_call_event(pTHX_ const char **src, const char *max, U64 tag, SV *out) {
                 break;
             case NRTRDE_TAG_LOCATION_AREA:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(hv, "location_area", newSViv(target_numeric));
+                hv_stores(hv, "location_area", newSVi64(target_numeric));
                 break;
             case NRTRDE_TAG_MSISDN:
                 scan_bcd_notag(src, max, target_sv);
@@ -153,11 +155,11 @@ scan_call_event(pTHX_ const char **src, const char *max, U64 tag, SV *out) {
                 switch (tag) {
                 case NRTRDE_TAG_TELE_SERVICE_CODE:
                     scan_numeric_notag(src, max1, &target_numeric);
-                    hv_stores(hv, "tele_service_code", newSViv(target_numeric));
+                    hv_stores(hv, "tele_service_code", newSVi64(target_numeric));
                     break;
                 case NRTRDE_TAG_BEARER_SERVICE_CODE:
                     scan_numeric_notag(src, max1, &target_numeric);
-                    hv_stores(hv, "bearer_service_code", newSViv(target_numeric));
+                    hv_stores(hv, "bearer_service_code", newSVi64(target_numeric));
                     break;
                 default:
                     croak("scan_call_event: unexpected application tag for service code %d", tag);
@@ -233,12 +235,12 @@ scan_nrtrde(pTHX_ const char **src, const char *max, HV *out) {
             switch (tag) {
             case NRTRDE_TAG_SPECIFICATION_VERSION_NUMBER:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(out, "specification_version_number", newSViv(target_numeric));
+                hv_stores(out, "specification_version_number", newSVi64(target_numeric));
                 break;
 
             case NRTRDE_TAG_RELEASE_VERSION_NUMBER:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(out, "release_version_number", newSViv(target_numeric));
+                hv_stores(out, "release_version_number", newSVi64(target_numeric));
                 break;
 
             case NRTRDE_TAG_SENDER:
@@ -268,7 +270,7 @@ scan_nrtrde(pTHX_ const char **src, const char *max, HV *out) {
 
             case NRTRDE_TAG_CALL_EVENTS_COUNT:
                 scan_numeric_notag(src, max, &target_numeric);
-                hv_stores(out, "call_events_count", newSViv(target_numeric));
+                hv_stores(out, "call_events_count", newSVi64(target_numeric));
                 break;
 
             default:
