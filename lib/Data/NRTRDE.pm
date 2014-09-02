@@ -18,49 +18,55 @@ __END__
 
 =head1 NAME
 
-Data::NRTRDE - Perl extension for blah blah blah
+Data::NRTRDE - Parser for NRTRDE files.
 
 =head1 SYNOPSIS
 
-  use Data::NRTRDE;
-  blah blah blah
+  use Data::NRTRDE qw(parse_nrtrde);
+  my $data = parse_nrtrde($buffer);
 
 =head1 DESCRIPTION
 
-Stub documentation for Data::NRTRDE, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
-
-Blah blah blah.
+This module parsers NRTRDE (Near Real Time Roaming Data Exchange)
+files and converts them into Perl data structures.
 
 =head2 EXPORT
 
-None by default.
+The following subroutines can be imported from this module:
 
+=over 4
 
+=item $data = parse_nrtrde($buffer)
+
+parses the NRTRDE data in the given buffer and returns it as a Perl
+data structure.
+
+=back
 
 =head1 SEE ALSO
 
-Mention other useful documentation such as the documentation of
-related modules or operating system documentation (such as man pages
-in UNIX), or any relevant external documentation such as RFCs or
-standards.
-
-If you have a mailing list set up for your module, mention it here.
-
-If you have a web site set up for your module, mention it here.
+NRTRDE TD.35 specification from the GSM Association... if you
+can (they don't make the specification publicly available).
 
 =head1 AUTHOR
 
-Salvador Fandiño, E<lt>salva@E<gt>
+Salvador Fandiño, E<lt>sfandino@yahoo.comE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2014 by Salvador Fandiño
+Copyright (C) 2014 by Qindel Formación y Servicios S.L.
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.18.2 or,
-at your option, any later version of Perl 5 you may have available.
+This Perl module is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
+This Perl module is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this package. If not, see L<http://www.gnu.org/licenses/>.
 
 =cut

@@ -5,7 +5,6 @@ use warnings;
 
 use Data::NRTRDE qw(parse_nrtrde);
 use JSON;
-use feature qw(say);
 
 my $json = JSON->new->ascii->pretty->indent;
 
@@ -18,7 +17,7 @@ sub parse_and_dump_fh {
 	binmode $fh;
 	my $data = do { undef $/; <$fh> };
 	my $nrtrde = parse_nrtrde($data);
-	say $json->encode($nrtrde);
+	print $json->encode($nrtrde), "\n";
     };
     $@ and warn $@;
 }
